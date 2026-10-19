@@ -1,0 +1,1162 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok App/Web Template Studio PRO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Library to capture and export 1080x1920 high resolution PNGs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&family=Bebas+Neue&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Space Grotesk"', 'sans-serif'],
+            bebas: ['"Bebas Neue"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            brand: {
+              cyan: '#00F2FE',
+              purple: '#4FACFE',
+              accent: '#FE2C55',
+              neon: '#25F4EE',
+              chroma: '#00FF00'
+            }
+          },
+          animation: {
+            'float': 'floating 3.5s ease-in-out infinite',
+            'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'badge-pop': 'badgePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            'marquee': 'marqueeScroll 16s linear infinite'
+          },
+          keyframes: {
+            floating: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-6px)' }
+            },
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.6', filter: 'drop-shadow(0 0 15px rgba(254,44,85,0.4))' },
+              '50%': { opacity: '1', filter: 'drop-shadow(0 0 25px rgba(37,244,238,0.7))' }
+            },
+            badgePop: {
+              '0%': { transform: 'scale(0.8)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' }
+            },
+            marqueeScroll: {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-50%)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Aspect ratio 9:16 vertical TikTok canvas */
+    .tiktok-canvas-wrapper {
+      aspect-ratio: 9 / 16;
+      width: 100%;
+      max-width: 380px;
+      height: min(770px, 86vh);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.12);
+    }
+
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* Safe zone overlay pattern */
+    .tiktok-safe-guide {
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(239, 68, 68, 0.08),
+        rgba(239, 68, 68, 0.08) 10px,
+        rgba(239, 68, 68, 0.18) 10px,
+        rgba(239, 68, 68, 0.18) 20px
+      );
+    }
+
+    /* Chroma Key Background mode for direct video layering in editors */
+    .bg-chroma-key {
+      background-color: #00FF00 !important;
+      background-image: none !important;
+    }
+
+    /* Screenshot device frame simulated scroll */
+    .mockup-preview-window {
+      background-size: cover;
+      background-position: top center;
+      transition: background-position 5s ease-in-out;
+    }
+    .mockup-preview-window:hover {
+      background-position: bottom center;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-rose-500 selection:text-white flex flex-col">
+
+  <!-- Main Top Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#FE2C55] via-[#25F4EE] to-[#00F2FE] p-[2px] flex items-center justify-center shadow-lg shadow-rose-500/20">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+            <i class="fa-brands fa-tiktok text-xl text-rose-500"></i>
+          </div>
+        </div>
+        <div>
+          <h1 class="font-black text-base sm:text-lg leading-tight flex items-center gap-2">
+            <span>TikTok App Studio <span class="text-cyan-400">PRO</span></span>
+            <span class="text-[10px] font-mono uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">1080×1920 HD</span>
+          </h1>
+          <p class="text-xs text-slate-400 hidden sm:block">Generador viral de fichas dinámicas para apps, webs e IAs</p>
+        </div>
+      </div>
+      
+      <!-- Action buttons -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <button id="toggleSafeAreaBtn" title="Muestra las zonas tapadas por TikTok" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-ruler-combined text-rose-400"></i>
+          <span>Zona Segura</span>
+        </button>
+
+        <button id="toggleChromaBtn" title="Fondo Verde para Chroma Key en CapCut / Premiere" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1.5 transition">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span>
+          <span>Chroma Key</span>
+        </button>
+
+        <button id="playAnimationBtn" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
+          <span>Animar</span>
+        </button>
+
+        <button id="downloadImageBtn" class="text-xs font-bold px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-rose-500 to-pink-600 hover:opacity-95 text-white flex items-center gap-1.5 shadow-lg shadow-rose-500/20 transition">
+          <i class="fa-solid fa-download"></i>
+          <span>Exportar PNG</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    
+    <!-- Left Column: Settings and Content Editor -->
+    <section class="lg:col-span-7 bg-slate-900/90 border border-slate-800/80 rounded-2xl p-4 sm:p-6 space-y-6 shadow-2xl order-2 lg:order-1">
+      
+      <!-- Tabs Navigation -->
+      <div class="flex items-center gap-2 border-b border-slate-800 pb-3 overflow-x-auto text-xs font-bold">
+        <button id="tabBtnContent" class="tab-btn active px-3.5 py-2 rounded-xl bg-slate-800 text-cyan-400 flex items-center gap-2 border border-cyan-500/30">
+          <i class="fa-solid fa-pen"></i> Contenido & Textos
+        </button>
+        <button id="tabBtnMedia" class="tab-btn px-3.5 py-2 rounded-xl bg-slate-900 text-slate-400 hover:text-slate-200 flex items-center gap-2 border border-slate-800">
+          <i class="fa-solid fa-image"></i> Mockup & Captura
+        </button>
+        <button id="tabBtnTiktokUI" class="tab-btn px-3.5 py-2 rounded-xl bg-slate-900 text-slate-400 hover:text-slate-200 flex items-center gap-2 border border-slate-800">
+          <i class="fa-brands fa-tiktok"></i> Datos TikTok
+        </button>
+        <button id="tabBtnThemes" class="tab-btn px-3.5 py-2 rounded-xl bg-slate-900 text-slate-400 hover:text-slate-200 flex items-center gap-2 border border-slate-800">
+          <i class="fa-solid fa-swatchbook"></i> Estilos & FX
+        </button>
+      </div>
+
+      <div id="tabContentSection" class="space-y-5">
+        
+        <!-- Quick Presets -->
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between mb-2">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-bolt text-amber-400"></i> Plantillas Rápidas con Gancho</span>
+            <span class="text-[10px] text-slate-500">1 clic para autorellenar</span>
+          </label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button id="presetWebIA" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/50 text-left text-xs transition">
+              <span class="font-bold text-cyan-400 block truncate">🤖 Web de IA</span>
+              <span class="text-[10px] text-slate-400 block truncate">Gamma.app / Diseño</span>
+            </button>
+            <button id="presetAppProductivity" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-purple-500/50 text-left text-xs transition">
+              <span class="font-bold text-purple-400 block truncate">⚡ App Productiva</span>
+              <span class="text-[10px] text-slate-400 block truncate">Notion Calendar</span>
+            </button>
+            <button id="presetFreeUtility" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-emerald-500/50 text-left text-xs transition">
+              <span class="font-bold text-emerald-400 block truncate">🛠️ 100% Gratis</span>
+              <span class="text-[10px] text-slate-400 block truncate">TinyWow Tools</span>
+            </button>
+            <button id="presetSecretApp" class="px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-800 hover:border-rose-500/50 text-left text-xs transition">
+              <span class="font-bold text-rose-400 block truncate">🤫 App Secreta</span>
+              <span class="text-[10px] text-slate-400 block truncate">Photomath Hack</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Gancho Viral (Hook) -->
+        <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs font-bold text-rose-400 uppercase tracking-wide flex items-center gap-1.5">
+              <i class="fa-solid fa-fire"></i> Gancho Inicial (0 a 3 seg)
+            </label>
+            <span class="text-[10px] text-slate-500 font-mono">Alta Retención</span>
+          </div>
+          <input type="text" id="inputHook" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2 text-sm text-white font-bold focus:ring-2 focus:ring-rose-500 focus:outline-none" value="ESTA WEB DEBERÍA SER ILEGAL 🤫">
+          <div class="flex gap-1.5 mt-2 flex-wrap text-[10px]">
+            <button type="button" class="quick-hook-btn px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">¡DEJA DE PERDER EL TIEMPO! ⏰</button>
+            <button type="button" class="quick-hook-btn px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">LA APP SECRETA DE LOS TOPS 🤫</button>
+            <button type="button" class="quick-hook-btn px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">GOOGLE NO QUIERE QUE SEPAS ESTO ⚠️</button>
+          </div>
+        </div>
+
+        <!-- Nombre y Tipo -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre de la App / Web</label>
+            <input type="text" id="inputAppName" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none" value="Gamma.app">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Badge de Categoría</label>
+            <input type="text" id="inputCategory" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none" value="🤖 Inteligencia Artificial">
+          </div>
+        </div>
+
+        <!-- Descripción Directa -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Propuesta de Valor (Problema que resuelve en 1 frase)</label>
+          <textarea id="inputDescription" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none">Crea diapositivas, documentos y páginas web enteras en 30 segundos solo escribiendo un texto breve.</textarea>
+        </div>
+
+        <!-- 3 Puntos Clave -->
+        <div class="space-y-2">
+          <label class="block text-xs font-semibold text-slate-300 flex items-center justify-between">
+            <span>3 Puntos Fuertes (Ventajas visuales)</span>
+            <span class="text-[10px] text-slate-500">Lectura rápida de TikTok</span>
+          </label>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-bold">1</span>
+              <input type="text" id="inputPoint1" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" value="Genera diseños completos con 1 clic de IA">
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-bold">2</span>
+              <input type="text" id="inputPoint2" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" value="Exporta directo a PDF y PowerPoint sin marcas">
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 text-xs flex items-center justify-center font-bold">3</span>
+              <input type="text" id="inputPoint3" class="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" value="Versión gratuita con créditos recargables">
+            </div>
+          </div>
+        </div>
+
+        <!-- Ficha de Datos Rápida -->
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Precio</label>
+            <input type="text" id="inputPricing" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="Gratis + Plan Pro">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Plataforma</label>
+            <input type="text" id="inputPlatform" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="Web / Navegador">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nota Viral</label>
+            <input type="text" id="inputRating" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white" value="⭐ 9.9 / 10">
+          </div>
+        </div>
+
+        <!-- CTA Gancho Final -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Llamada a la Acción (CTA Sticker al pie)</label>
+          <input type="text" id="inputCta" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2 text-sm text-white focus:ring-2 focus:ring-cyan-500 focus:outline-none" value="Guarda el video antes de tu próxima expo 📌">
+        </div>
+
+      </div>
+
+      <div id="tabMediaSection" class="hidden space-y-4">
+        
+        <div class="p-4 bg-slate-950/70 rounded-xl border border-slate-800 space-y-3">
+          <label class="block text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-2">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Captura Real de la Web o App
+          </label>
+          <p class="text-xs text-slate-400">Sube una captura de pantalla real de la herramienta o escoge una de demostración.</p>
+          
+          <div class="flex items-center gap-3">
+            <label class="cursor-pointer px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow">
+              <i class="fa-solid fa-upload"></i>
+              <span>Subir Imagen</span>
+              <input type="file" id="imageUploader" accept="image/*" class="hidden">
+            </label>
+            <button id="resetDemoImageBtn" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-xl">
+              Restablecer Demo
+            </button>
+            <button id="toggleMockupVisibility" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-xl flex items-center gap-1.5">
+              <i class="fa-regular fa-eye"></i>
+              <span id="mockupVisText">Ocultar Mockup</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mockup Device Frame Selection -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-2">Marco de Dispositivo para la Captura</label>
+          <div class="grid grid-cols-3 gap-2">
+            <button data-frame="browser" class="frame-selector-btn active border-2 border-cyan-400 bg-slate-800/80 p-2.5 rounded-xl text-xs font-bold text-left">
+              <div class="flex items-center gap-1.5 text-cyan-400 mb-1"><i class="fa-solid fa-window-maximize"></i> Navegador</div>
+              <span class="text-[10px] text-slate-400 font-normal">Para páginas web & SaaS</span>
+            </button>
+            <button data-frame="phone" class="frame-selector-btn border-2 border-slate-800 bg-slate-900/80 p-2.5 rounded-xl text-xs font-bold text-left">
+              <div class="flex items-center gap-1.5 text-slate-300 mb-1"><i class="fa-solid fa-mobile-screen"></i> Teléfono</div>
+              <span class="text-[10px] text-slate-400 font-normal">Para apps de iOS / Android</span>
+            </button>
+            <button data-frame="minimal" class="frame-selector-btn border-2 border-slate-800 bg-slate-900/80 p-2.5 rounded-xl text-xs font-bold text-left">
+              <div class="flex items-center gap-1.5 text-slate-300 mb-1"><i class="fa-regular fa-square"></i> Sin marco</div>
+              <span class="text-[10px] text-slate-400 font-normal">Borde limpio & redondeado</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mockup Display Height Slider -->
+        <div>
+          <div class="flex justify-between items-center text-xs font-medium text-slate-300 mb-1">
+            <span>Altura del Mockup en Pantalla</span>
+            <span id="mockupHeightVal" class="text-cyan-400 font-mono">110px</span>
+          </div>
+          <input type="range" id="mockupHeightSlider" min="70" max="180" value="110" class="w-full accent-cyan-400 bg-slate-800 rounded-lg h-2 cursor-pointer">
+        </div>
+
+      </div>
+
+      <div id="tabTiktokUISection" class="hidden space-y-4">
+        <p class="text-xs text-slate-400">Personaliza la interfaz de TikTok para que combine exactamente con tu cuenta oficial:</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Usuario TikTok (@)</label>
+            <input type="text" id="inputTtUser" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" value="@tu.cuenta.tech">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Etiqueta de Creador</label>
+            <input type="text" id="inputTtBadge" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" value="Tech & Apps">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Pie de Foto / Descripción del Video</label>
+          <textarea id="inputTtCaption" rows="2" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white">¡No vuelvas a hacer diapositivas a mano! #inteligenciaartificial #apps #trucosweb #estudiantes</textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Likes Simulados</label>
+            <input type="text" id="inputTtLikes" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" value="84.2K">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Guardados Simulados</label>
+            <input type="text" id="inputTtSaves" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" value="41.9K">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre de Audio Viral</label>
+          <input type="text" id="inputTtAudio" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white" value="Sonido original - Trend Tech Viral">
+        </div>
+
+        <!-- Toggle UI elements -->
+        <div class="flex items-center gap-4 pt-2">
+          <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
+            <input type="checkbox" id="checkShowTtUI" checked class="rounded border-slate-700 text-rose-500 focus:ring-rose-500">
+            <span>Mostrar Interfaz de TikTok (Botones laterales)</span>
+          </label>
+        </div>
+      </div>
+
+      <div id="tabThemesSection" class="hidden space-y-4">
+        
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">
+            Elige el Estilo Visual (Color Grade)
+          </label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button data-theme="cyber" class="theme-btn active-theme p-3 rounded-xl border-2 border-cyan-400 bg-slate-800 text-left transition flex flex-col justify-between">
+              <span class="font-bold text-xs text-cyan-400">Cyber Neon</span>
+              <span class="text-[10px] text-slate-400 mt-1">Oscuro, IA & Tech</span>
+            </button>
+            <button data-theme="creator" class="theme-btn p-3 rounded-xl border-2 border-slate-800 bg-slate-900/60 text-left hover:border-purple-400 transition flex flex-col justify-between">
+              <span class="font-bold text-xs text-purple-400">Creator Glow</span>
+              <span class="text-[10px] text-slate-400 mt-1">Degradado TikTok</span>
+            </button>
+            <button data-theme="bento" class="theme-btn p-3 rounded-xl border-2 border-slate-800 bg-slate-900/60 text-left hover:border-amber-400 transition flex flex-col justify-between">
+              <span class="font-bold text-xs text-amber-300">Bento Clean</span>
+              <span class="text-[10px] text-slate-400 mt-1">Estilo Apple / Notion</span>
+            </button>
+            <button data-theme="alert" class="theme-btn p-3 rounded-xl border-2 border-slate-800 bg-slate-900/60 text-left hover:border-rose-400 transition flex flex-col justify-between">
+              <span class="font-bold text-xs text-rose-400">Viral Alert</span>
+              <span class="text-[10px] text-slate-400 mt-1">Intriga & Hack</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Background Wallpaper Mood -->
+        <div class="pt-2">
+          <label class="text-xs font-semibold text-slate-300 block mb-2">Fondo del Lienzo Vertical</label>
+          <div class="grid grid-cols-3 gap-2 text-xs">
+            <button id="bgMoodDark" class="p-2 rounded-lg bg-slate-950 border border-cyan-500 text-slate-200 font-semibold">
+              🌌 Espacio Profundo
+            </button>
+            <button id="bgMoodAbstract" class="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 font-semibold">
+              🔮 Mesh Gradient
+            </button>
+            <button id="bgMoodChroma" class="p-2 rounded-lg bg-emerald-950 border border-emerald-500 text-emerald-300 font-semibold">
+              🟩 Pantalla Verde
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="p-4 bg-slate-950/80 rounded-xl border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-xs text-slate-300 space-y-0.5">
+          <p class="font-bold text-cyan-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-film"></i> Generador de Teleprompter / Guion TikTok
+          </p>
+          <p class="text-slate-400 text-[11px]">Calculado para una duración óptima de 25-35 segundos.</p>
+        </div>
+        <button id="copyScriptBtn" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white font-bold text-xs flex items-center gap-2 whitespace-nowrap shadow-lg shadow-cyan-500/20 transition">
+          <i class="fa-regular fa-copy"></i>
+          <span>Copiar Guion Completo</span>
+        </button>
+      </div>
+
+      <!-- Toast Feedback -->
+      <div id="toast" class="hidden fixed bottom-6 right-6 bg-emerald-500 text-slate-950 px-4 py-2.5 rounded-xl font-black text-xs shadow-2xl flex items-center gap-2 z-50 animate-bounce">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMsg">Acción completada con éxito</span>
+      </div>
+
+    </section>
+
+    <div class="lg:col-span-5 flex flex-col items-center justify-center order-1 lg:order-2 sticky top-16">
+      
+      <!-- Container to capture for html2canvas -->
+      <div id="captureRoot" class="tiktok-canvas-wrapper relative rounded-[42px] overflow-hidden bg-black select-none transition-all duration-500 flex flex-col justify-between p-3.5 pb-6 border-4 border-slate-800/80">
+        
+        <!-- Background Wallpaper / Ambient Glows -->
+        <div id="phoneBackground" class="absolute inset-0 bg-slate-950 z-0 overflow-hidden pointer-events-none transition-all duration-500">
+          <div id="dynamicBgGlow" class="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-cyan-500/25 blur-[75px] transition-all duration-700"></div>
+          <div id="dynamicBgGlow2" class="absolute -bottom-20 -right-20 w-80 h-80 rounded-full bg-rose-500/25 blur-[85px] transition-all duration-700"></div>
+          <div class="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
+        </div>
+
+        <!-- Safe Area Overlay (Toggleable) -->
+        <div id="safeAreaGuide" class="tiktok-safe-guide absolute inset-0 z-40 pointer-events-none hidden border-4 border-dashed border-red-500/60">
+          <div class="absolute top-2 left-2 bg-red-600 text-white font-mono text-[8px] px-2 py-0.5 rounded uppercase font-bold">
+            Zona de Peligro (Cubierta por barra sup.)
+          </div>
+          <!-- Safe content zone box in center -->
+          <div class="absolute top-[68px] bottom-[115px] left-[10px] right-[65px] border-2 border-emerald-400 bg-emerald-500/10 rounded-2xl flex items-start justify-end p-2 pointer-events-none">
+            <span class="bg-emerald-600 text-white text-[8px] font-black px-1.5 py-0.5 rounded shadow">ZONA SEGURA 100% VISIBLE</span>
+          </div>
+          <div class="absolute bottom-2 left-2 bg-red-600 text-white font-mono text-[8px] px-2 py-0.5 rounded uppercase font-bold">
+            Zona de Peligro (Descripción y audio)
+          </div>
+        </div>
+
+        <!-- TikTok Top Bar Simulation -->
+        <div id="ttTopBar" class="relative z-20 flex items-center justify-between text-white/90 text-xs px-2 pt-1.5">
+          <div class="flex items-center gap-1 text-[11px] font-semibold text-white/70">
+            <i class="fa-solid fa-tv text-[10px]"></i>
+            <span>LIVE</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs font-black drop-shadow">
+            <span class="text-white/40">Siguiendo</span>
+            <span class="text-white border-b-2 border-white pb-0.5 font-extrabold">Para ti</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          </div>
+        </div>
+
+        <div id="animatedCard" class="relative z-20 w-full my-auto transition-all duration-300 transform">
+          
+          <!-- Viral Hook Header Badge -->
+          <div class="text-center mb-2.5">
+            <div id="cardHookWrapper" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-rose-600 to-red-500 text-white font-black text-[12px] sm:text-xs tracking-wide shadow-lg shadow-rose-600/40 uppercase animate-bounce">
+              <i class="fa-solid fa-bullhorn text-[11px]"></i>
+              <span id="previewHook">ESTA WEB DEBERÍA SER ILEGAL 🤫</span>
+            </div>
+          </div>
+
+          <!-- Glassmorphism Main Bento Card -->
+          <div id="mainCardTheme" class="bg-slate-900/90 backdrop-blur-md border border-cyan-500/40 rounded-2xl p-3.5 shadow-2xl relative overflow-hidden transition-all duration-300">
+            
+            <!-- Category and Tag -->
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span id="previewCategory" class="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+                🤖 Inteligencia Artificial
+              </span>
+              <span id="previewRating" class="text-[10px] font-bold text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded-md border border-amber-400/20">
+                ⭐ 9.9 / 10
+              </span>
+            </div>
+
+            <!-- App Title & Icon -->
+            <div class="flex items-center gap-2.5 mb-2.5">
+              <div id="previewAppIcon" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center font-black text-white text-lg shadow-md shrink-0">
+                G
+              </div>
+              <div class="overflow-hidden">
+                <h2 id="previewAppName" class="text-base font-black text-white leading-tight tracking-tight truncate">
+                  Gamma.app
+                </h2>
+                <p id="previewPlatform" class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider truncate">
+                  Web / Navegador
+                </p>
+              </div>
+            </div>
+
+            <!-- Short Hook Explanation -->
+            <p id="previewDescription" class="text-[11px] text-slate-200 font-medium leading-snug mb-2.5 bg-black/40 p-2 rounded-xl border border-white/5">
+              Crea diapositivas, documentos y páginas web enteras en 30 segundos solo escribiendo un texto breve.
+            </p>
+
+            <!-- Mockup Screenshot Window (Uploadable/Switchable) -->
+            <div id="mockupContainer" class="mb-2.5 overflow-hidden transition-all duration-300">
+              <div id="mockupFrameHeader" class="bg-slate-800/90 px-2 py-1 rounded-t-lg flex items-center gap-1.5 border-t border-x border-slate-700">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-yellow-500 inline-block"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+                <span id="mockupUrlBar" class="text-[9px] text-slate-400 ml-2 font-mono truncate">https://gamma.app</span>
+              </div>
+              <div id="mockupImageWindow" class="mockup-preview-window w-full h-[110px] rounded-b-lg border-b border-x border-slate-700 relative bg-slate-950 flex items-center justify-center overflow-hidden" style="background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80');">
+                <div class="absolute bottom-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[8px] text-cyan-300 font-mono">
+                  En vivo ⚡
+                </div>
+              </div>
+            </div>
+
+            <!-- 3 Bullet Features -->
+            <div class="space-y-1 mb-2.5">
+              <div class="flex items-center gap-2 text-[10px] text-slate-100 bg-white/5 p-1.5 rounded-lg border border-white/5">
+                <i class="fa-solid fa-circle-check text-cyan-400 text-xs shrink-0"></i>
+                <span id="previewPoint1" class="font-medium truncate">Genera diseños completos con 1 clic de IA</span>
+              </div>
+              <div class="flex items-center gap-2 text-[10px] text-slate-100 bg-white/5 p-1.5 rounded-lg border border-white/5">
+                <i class="fa-solid fa-circle-check text-cyan-400 text-xs shrink-0"></i>
+                <span id="previewPoint2" class="font-medium truncate">Exporta directo a PDF y PowerPoint sin marcas</span>
+              </div>
+              <div class="flex items-center gap-2 text-[10px] text-slate-100 bg-white/5 p-1.5 rounded-lg border border-white/5">
+                <i class="fa-solid fa-circle-check text-cyan-400 text-xs shrink-0"></i>
+                <span id="previewPoint3" class="font-medium truncate">Versión gratuita con créditos recargables</span>
+              </div>
+            </div>
+
+            <!-- Quick Specs Row -->
+            <div class="flex items-center justify-between pt-1.5 border-t border-white/10 text-[9px] font-semibold text-slate-400">
+              <span class="flex items-center gap-1 truncate">
+                <i class="fa-solid fa-tag text-emerald-400"></i>
+                <span id="previewPricing" class="text-slate-200">Gratis + Plan Pro</span>
+              </span>
+              <span class="text-cyan-400 font-bold flex items-center gap-1 shrink-0">
+                <span>100% Verificada</span>
+                <i class="fa-solid fa-circle-check text-[10px]"></i>
+              </span>
+            </div>
+          </div>
+
+          <!-- Bottom CTA Sticker -->
+          <div class="text-center mt-2.5">
+            <div id="previewCtaWrapper" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 font-black text-[10px] sm:text-[11px] tracking-wide shadow-lg shadow-amber-400/20 transform -rotate-1 hover:rotate-0 transition">
+              <i class="fa-solid fa-bookmark text-[10px]"></i>
+              <span id="previewCta">Guarda el video antes de tu próxima expo 📌</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="ttInteractiveUI" class="relative z-20 flex items-end justify-between pr-0.5">
+          <!-- User info bottom-left -->
+          <div class="max-w-[72%] space-y-1 text-white">
+            <div class="flex items-center gap-1.5">
+              <span id="ttPreviewUser" class="text-xs font-bold drop-shadow">@tu.cuenta.tech</span>
+              <span id="ttPreviewBadge" class="text-[8px] bg-slate-800/90 border border-slate-700 px-1.5 py-0.2 rounded text-cyan-300 font-bold">Tech & Apps</span>
+            </div>
+            <p id="ttPreviewCaption" class="text-[10px] text-white/95 font-normal line-clamp-2 leading-tight drop-shadow">
+              ¡No vuelvas a hacer diapositivas a mano! #inteligenciaartificial #apps #trucosweb #estudiantes
+            </p>
+            <div class="flex items-center gap-1 text-[9px] text-white/80">
+              <i class="fa-solid fa-music text-[8px] animate-pulse"></i>
+              <span id="ttPreviewAudio" class="truncate font-medium">Sonido original - Trend Tech Viral</span>
+            </div>
+          </div>
+
+          <!-- Right Action Bar (TikTok Interaction Icons) -->
+          <div class="flex flex-col items-center gap-2.5 text-white">
+            <!-- Profile avatar with plus -->
+            <div class="relative mb-0.5">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-500 to-cyan-400 p-[2px]">
+                <div class="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-[9px] font-bold">
+                  TU
+                </div>
+              </div>
+              <span class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-rose-500 flex items-center justify-center text-[8px] text-white font-bold leading-none shadow">
+                +
+              </span>
+            </div>
+
+            <!-- Like -->
+            <div class="flex flex-col items-center">
+              <div class="w-7 h-7 flex items-center justify-center rounded-full bg-black/25 backdrop-blur-sm">
+                <i class="fa-solid fa-heart text-base text-rose-500"></i>
+              </div>
+              <span id="ttPreviewLikes" class="text-[9px] font-bold mt-0.5">84.2K</span>
+            </div>
+
+            <!-- Comments -->
+            <div class="flex flex-col items-center">
+              <div class="w-7 h-7 flex items-center justify-center rounded-full bg-black/25 backdrop-blur-sm">
+                <i class="fa-solid fa-comment-dots text-base text-white"></i>
+              </div>
+              <span class="text-[9px] font-bold mt-0.5">582</span>
+            </div>
+
+            <!-- Bookmark / Save -->
+            <div class="flex flex-col items-center">
+              <div class="w-7 h-7 flex items-center justify-center rounded-full bg-black/25 backdrop-blur-sm">
+                <i class="fa-solid fa-bookmark text-base text-amber-400"></i>
+              </div>
+              <span id="ttPreviewSaves" class="text-[9px] font-bold mt-0.5">41.9K</span>
+            </div>
+
+            <!-- Share -->
+            <div class="flex flex-col items-center">
+              <div class="w-7 h-7 flex items-center justify-center rounded-full bg-black/25 backdrop-blur-sm">
+                <i class="fa-solid fa-share text-base text-white"></i>
+              </div>
+              <span class="text-[9px] font-bold mt-0.5">9.4K</span>
+            </div>
+
+            <!-- Spinning Record -->
+            <div class="w-7 h-7 rounded-full bg-slate-900 border-2 border-white/20 flex items-center justify-center animate-spin">
+              <div class="w-2.5 h-2.5 rounded-full bg-rose-500"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Tips below Phone -->
+      <div class="mt-3 flex items-center justify-between w-full max-w-[380px] text-[11px] text-slate-400 px-1">
+        <span class="flex items-center gap-1.5"><i class="fa-solid fa-mobile-screen text-cyan-400"></i> 1080 x 1920 (9:16)</span>
+        <span class="text-slate-500">Haz clic en "Exportar PNG"</span>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Theme configurations
+    const themes = {
+      cyber: {
+        glow1: 'bg-cyan-500/25',
+        glow2: 'bg-rose-500/25',
+        card: 'bg-slate-900/90 backdrop-blur-md border border-cyan-500/40 rounded-2xl p-3.5 shadow-2xl text-slate-100',
+        hook: 'bg-gradient-to-r from-rose-600 to-red-500 text-white shadow-rose-600/40',
+        cta: 'bg-cyan-400 text-slate-950 shadow-cyan-400/30',
+        accentText: 'text-cyan-400',
+        iconBg: 'bg-gradient-to-tr from-cyan-400 to-blue-600 text-white'
+      },
+      creator: {
+        glow1: 'bg-purple-600/30',
+        glow2: 'bg-pink-500/25',
+        card: 'bg-gradient-to-b from-purple-950/90 to-slate-900/90 backdrop-blur-md border border-purple-500/50 rounded-2xl p-3.5 shadow-2xl text-slate-100',
+        hook: 'bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-500 text-white shadow-fuchsia-600/40',
+        cta: 'bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 shadow-amber-400/30',
+        accentText: 'text-purple-400',
+        iconBg: 'bg-gradient-to-tr from-violet-500 to-pink-500 text-white'
+      },
+      bento: {
+        glow1: 'bg-slate-700/20',
+        glow2: 'bg-amber-500/15',
+        card: 'bg-neutral-900/95 backdrop-blur-xl border border-neutral-700/80 rounded-2xl p-3.5 shadow-2xl text-white',
+        hook: 'bg-white text-neutral-950 font-black shadow-white/20',
+        cta: 'bg-amber-400 text-black shadow-amber-400/20',
+        accentText: 'text-amber-400',
+        iconBg: 'bg-neutral-800 border border-neutral-600 text-amber-400'
+      },
+      alert: {
+        glow1: 'bg-red-600/25',
+        glow2: 'bg-yellow-500/25',
+        card: 'bg-red-950/85 backdrop-blur-md border-2 border-red-500/80 rounded-2xl p-3.5 shadow-2xl text-slate-100',
+        hook: 'bg-yellow-400 text-black font-black uppercase shadow-yellow-500/40',
+        cta: 'bg-red-600 text-white shadow-red-600/40',
+        accentText: 'text-red-400',
+        iconBg: 'bg-red-600 text-white'
+      }
+    };
+
+    let currentTheme = 'cyber';
+    let isMockupVisible = true;
+    let isChromaMode = false;
+
+    // DOM Elements - Form Inputs
+    const inputHook = document.getElementById('inputHook');
+    const inputAppName = document.getElementById('inputAppName');
+    const inputCategory = document.getElementById('inputCategory');
+    const inputDescription = document.getElementById('inputDescription');
+    const inputPoint1 = document.getElementById('inputPoint1');
+    const inputPoint2 = document.getElementById('inputPoint2');
+    const inputPoint3 = document.getElementById('inputPoint3');
+    const inputPricing = document.getElementById('inputPricing');
+    const inputPlatform = document.getElementById('inputPlatform');
+    const inputRating = document.getElementById('inputRating');
+    const inputCta = document.getElementById('inputCta');
+
+    // DOM Elements - TikTok Social metadata inputs
+    const inputTtUser = document.getElementById('inputTtUser');
+    const inputTtBadge = document.getElementById('inputTtBadge');
+    const inputTtCaption = document.getElementById('inputTtCaption');
+    const inputTtLikes = document.getElementById('inputTtLikes');
+    const inputTtSaves = document.getElementById('inputTtSaves');
+    const inputTtAudio = document.getElementById('inputTtAudio');
+    const checkShowTtUI = document.getElementById('checkShowTtUI');
+
+    // DOM Elements - Canvas Previews
+    const previewHook = document.getElementById('previewHook');
+    const previewAppName = document.getElementById('previewAppName');
+    const previewAppIcon = document.getElementById('previewAppIcon');
+    const previewCategory = document.getElementById('previewCategory');
+    const previewDescription = document.getElementById('previewDescription');
+    const previewPoint1 = document.getElementById('previewPoint1');
+    const previewPoint2 = document.getElementById('previewPoint2');
+    const previewPoint3 = document.getElementById('previewPoint3');
+    const previewPricing = document.getElementById('previewPricing');
+    const previewPlatform = document.getElementById('previewPlatform');
+    const previewRating = document.getElementById('previewRating');
+    const previewCta = document.getElementById('previewCta');
+    const cardHookWrapper = document.getElementById('cardHookWrapper');
+    const mainCardTheme = document.getElementById('mainCardTheme');
+    const previewCtaWrapper = document.getElementById('previewCtaWrapper');
+    const dynamicBgGlow = document.getElementById('dynamicBgGlow');
+    const dynamicBgGlow2 = document.getElementById('dynamicBgGlow2');
+    const animatedCard = document.getElementById('animatedCard');
+    const safeAreaGuide = document.getElementById('safeAreaGuide');
+    const phoneBackground = document.getElementById('phoneBackground');
+    const captureRoot = document.getElementById('captureRoot');
+
+    // TikTok interactive overlay items
+    const ttInteractiveUI = document.getElementById('ttInteractiveUI');
+    const ttTopBar = document.getElementById('ttTopBar');
+    const ttPreviewUser = document.getElementById('ttPreviewUser');
+    const ttPreviewBadge = document.getElementById('ttPreviewBadge');
+    const ttPreviewCaption = document.getElementById('ttPreviewCaption');
+    const ttPreviewLikes = document.getElementById('ttPreviewLikes');
+    const ttPreviewSaves = document.getElementById('ttPreviewSaves');
+    const ttPreviewAudio = document.getElementById('ttPreviewAudio');
+
+    // Mockup elements
+    const mockupContainer = document.getElementById('mockupContainer');
+    const mockupImageWindow = document.getElementById('mockupImageWindow');
+    const mockupFrameHeader = document.getElementById('mockupFrameHeader');
+    const mockupUrlBar = document.getElementById('mockupUrlBar');
+    const mockupHeightSlider = document.getElementById('mockupHeightSlider');
+    const mockupHeightVal = document.getElementById('mockupHeightVal');
+    const imageUploader = document.getElementById('imageUploader');
+
+    // Realtime update function
+    function updatePreview() {
+      previewHook.textContent = inputHook.value || 'ESTA APP ES VIRAL';
+      previewAppName.textContent = inputAppName.value || 'App';
+      previewAppIcon.textContent = (inputAppName.value || 'A').trim().charAt(0).toUpperCase();
+      previewCategory.textContent = inputCategory.value || 'Categoría';
+      previewDescription.textContent = inputDescription.value || 'Descripción del producto';
+      previewPoint1.textContent = inputPoint1.value || 'Ventaja 1';
+      previewPoint2.textContent = inputPoint2.value || 'Ventaja 2';
+      previewPoint3.textContent = inputPoint3.value || 'Ventaja 3';
+      previewPricing.textContent = inputPricing.value || 'Gratis';
+      previewPlatform.textContent = inputPlatform.value || 'Web';
+      previewRating.textContent = inputRating.value || '⭐ 10 / 10';
+      previewCta.textContent = inputCta.value || 'Guarda el video';
+      mockupUrlBar.textContent = 'https://' + (inputAppName.value.toLowerCase().replace(/[^a-z0-9]/g, '') || 'app') + '.com';
+
+      // TikTok social preview
+      ttPreviewUser.textContent = inputTtUser.value || '@tu.cuenta';
+      ttPreviewBadge.textContent = inputTtBadge.value || 'Creador';
+      ttPreviewCaption.textContent = inputTtCaption.value || 'Contenido viral';
+      ttPreviewLikes.textContent = inputTtLikes.value || '50K';
+      ttPreviewSaves.textContent = inputTtSaves.value || '20K';
+      ttPreviewAudio.textContent = inputTtAudio.value || 'Sonido original';
+    }
+
+    // Attach Input Event Listeners
+    [
+      inputHook, inputAppName, inputCategory, inputDescription,
+      inputPoint1, inputPoint2, inputPoint3, inputPricing,
+      inputPlatform, inputRating, inputCta,
+      inputTtUser, inputTtBadge, inputTtCaption, inputTtLikes, inputTtSaves, inputTtAudio
+    ].forEach(input => {
+      input.addEventListener('input', updatePreview);
+    });
+
+    // Quick Hook buttons
+    document.querySelectorAll('.quick-hook-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        inputHook.value = e.target.textContent;
+        updatePreview();
+      });
+    });
+
+    function applyTheme(themeKey) {
+      currentTheme = themeKey;
+      const t = themes[themeKey];
+      if (!t) return;
+
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        if (btn.getAttribute('data-theme') === themeKey) {
+          btn.classList.add('border-cyan-400', 'bg-slate-800');
+          btn.classList.remove('border-slate-800');
+        } else {
+          btn.classList.remove('border-cyan-400', 'bg-slate-800');
+          btn.classList.add('border-slate-800');
+        }
+      });
+
+      mainCardTheme.className = t.card;
+      cardHookWrapper.className = `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] sm:text-xs font-black tracking-wide shadow-lg uppercase animate-bounce ${t.hook}`;
+      previewCtaWrapper.className = `inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-[11px] tracking-wide shadow-lg transform -rotate-1 hover:rotate-0 transition ${t.cta}`;
+      previewAppIcon.className = `w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg shadow-md shrink-0 ${t.iconBg}`;
+
+      if (!isChromaMode) {
+        dynamicBgGlow.className = `absolute -top-20 -left-20 w-80 h-80 rounded-full ${t.glow1} blur-[75px] transition-all duration-700`;
+        dynamicBgGlow2.className = `absolute -bottom-20 -right-20 w-80 h-80 rounded-full ${t.glow2} blur-[85px] transition-all duration-700`;
+      }
+    }
+
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        applyTheme(btn.getAttribute('data-theme'));
+      });
+    });
+
+    const tabs = [
+      { btn: document.getElementById('tabBtnContent'), section: document.getElementById('tabContentSection') },
+      { btn: document.getElementById('tabBtnMedia'), section: document.getElementById('tabMediaSection') },
+      { btn: document.getElementById('tabBtnTiktokUI'), section: document.getElementById('tabTiktokUISection') },
+      { btn: document.getElementById('tabBtnThemes'), section: document.getElementById('tabThemesSection') }
+    ];
+
+    tabs.forEach(tab => {
+      tab.btn.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.btn.classList.remove('bg-slate-800', 'text-cyan-400', 'border-cyan-500/30');
+          t.btn.classList.add('bg-slate-900', 'text-slate-400', 'border-slate-800');
+          t.section.classList.add('hidden');
+        });
+        tab.btn.classList.add('bg-slate-800', 'text-cyan-400', 'border-cyan-500/30');
+        tab.btn.classList.remove('bg-slate-900', 'text-slate-400', 'border-slate-800');
+        tab.section.classList.remove('hidden');
+      });
+    });
+
+    // Mockup Frame Changer
+    document.querySelectorAll('.frame-selector-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.frame-selector-btn').forEach(b => {
+          b.classList.remove('border-cyan-400', 'bg-slate-800/80');
+          b.classList.add('border-slate-800', 'bg-slate-900/80');
+        });
+        btn.classList.add('border-cyan-400', 'bg-slate-800/80');
+        btn.classList.remove('border-slate-800', 'bg-slate-900/80');
+
+        const frame = btn.getAttribute('data-frame');
+        if (frame === 'browser') {
+          mockupFrameHeader.className = 'bg-slate-800/90 px-2 py-1 rounded-t-lg flex items-center gap-1.5 border-t border-x border-slate-700';
+          mockupFrameHeader.classList.remove('hidden');
+          mockupImageWindow.className = 'mockup-preview-window w-full rounded-b-lg border-b border-x border-slate-700 relative bg-slate-950 flex items-center justify-center overflow-hidden';
+        } else if (frame === 'phone') {
+          mockupFrameHeader.className = 'bg-black/90 py-0.5 rounded-t-2xl flex items-center justify-center border-t border-x border-slate-700';
+          mockupFrameHeader.innerHTML = '<span class="w-12 h-2.5 rounded-full bg-slate-800"></span>';
+          mockupImageWindow.className = 'mockup-preview-window w-full rounded-b-2xl border-b border-x border-slate-700 relative bg-slate-950 flex items-center justify-center overflow-hidden';
+        } else {
+          mockupFrameHeader.classList.add('hidden');
+          mockupImageWindow.className = 'mockup-preview-window w-full rounded-xl border border-slate-700 relative bg-slate-950 flex items-center justify-center overflow-hidden';
+        }
+      });
+    });
+
+    // Slider for Mockup Height
+    mockupHeightSlider.addEventListener('input', (e) => {
+      const val = e.target.value + 'px';
+      mockupImageWindow.style.height = val;
+      mockupHeightVal.textContent = val;
+    });
+
+    // Toggle Mockup Visibility
+    const toggleMockupBtn = document.getElementById('toggleMockupVisibility');
+    const mockupVisText = document.getElementById('mockupVisText');
+    toggleMockupBtn.addEventListener('click', () => {
+      isMockupVisible = !isMockupVisible;
+      if (isMockupVisible) {
+        mockupContainer.classList.remove('hidden');
+        mockupVisText.textContent = 'Ocultar Mockup';
+      } else {
+        mockupContainer.classList.add('hidden');
+        mockupVisText.textContent = 'Mostrar Mockup';
+      }
+    });
+
+    // Image Upload Handling
+    imageUploader.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          mockupImageWindow.style.backgroundImage = `url('${evt.target.result}')`;
+          showToast('¡Captura cargada con éxito!');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('resetDemoImageBtn').addEventListener('click', () => {
+      mockupImageWindow.style.backgroundImage = "url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=700&q=80')";
+      showToast('Imagen demo restaurada');
+    });
+
+    // Toggle TikTok UI Overlay
+    checkShowTtUI.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        ttInteractiveUI.classList.remove('opacity-0', 'pointer-events-none');
+        ttTopBar.classList.remove('opacity-0');
+      } else {
+        ttInteractiveUI.classList.add('opacity-0', 'pointer-events-none');
+        ttTopBar.classList.add('opacity-0');
+      }
+    });
+
+    const toggleChromaBtn = document.getElementById('toggleChromaBtn');
+    function setChromaKey(active) {
+      isChromaMode = active;
+      if (isChromaMode) {
+        phoneBackground.classList.add('bg-chroma-key');
+        dynamicBgGlow.classList.add('hidden');
+        dynamicBgGlow2.classList.add('hidden');
+        toggleChromaBtn.classList.add('bg-emerald-600', 'text-white');
+        showToast('Modo Chroma Verde activado');
+      } else {
+        phoneBackground.classList.remove('bg-chroma-key');
+        dynamicBgGlow.classList.remove('hidden');
+        dynamicBgGlow2.classList.remove('hidden');
+        toggleChromaBtn.classList.remove('bg-emerald-600', 'text-white');
+        showToast('Fondo original restaurado');
+      }
+    }
+
+    toggleChromaBtn.addEventListener('click', () => {
+      setChromaKey(!isChromaMode);
+    });
+
+    document.getElementById('bgMoodDark').addEventListener('click', () => {
+      setChromaKey(false);
+      phoneBackground.className = 'absolute inset-0 bg-slate-950 z-0 overflow-hidden pointer-events-none transition-all duration-500';
+    });
+
+    document.getElementById('bgMoodAbstract').addEventListener('click', () => {
+      setChromaKey(false);
+      phoneBackground.className = 'absolute inset-0 bg-gradient-to-b from-indigo-950 via-slate-950 to-slate-900 z-0 overflow-hidden pointer-events-none transition-all duration-500';
+    });
+
+    document.getElementById('bgMoodChroma').addEventListener('click', () => {
+      setChromaKey(true);
+    });
+
+    // Toggle Safe Area Guide
+    const toggleSafeAreaBtn = document.getElementById('toggleSafeAreaBtn');
+    toggleSafeAreaBtn.addEventListener('click', () => {
+      safeAreaGuide.classList.toggle('hidden');
+      if (safeAreaGuide.classList.contains('hidden')) {
+        toggleSafeAreaBtn.classList.remove('bg-rose-500/20', 'border-rose-500');
+      } else {
+        toggleSafeAreaBtn.classList.add('bg-rose-500/20', 'border-rose-500');
+      }
+    });
+
+    // Entrance Animation
+    function triggerEntranceAnimation() {
+      animatedCard.style.opacity = '0';
+      animatedCard.style.transform = 'scale(0.85) translateY(24px)';
+      
+      setTimeout(() => {
+        animatedCard.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        animatedCard.style.opacity = '1';
+        animatedCard.style.transform = 'scale(1) translateY(0px)';
+      }, 40);
+    }
+
+    document.getElementById('playAnimationBtn').addEventListener('click', triggerEntranceAnimation);
+
+    // Toast helper
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    const downloadImageBtn = document.getElementById('downloadImageBtn');
+    downloadImageBtn.addEventListener('click', () => {
+      // Temporarily hide safe area guide if visible
+      const wasGuideOpen = !safeAreaGuide.classList.contains('hidden');
+      if (wasGuideOpen) safeAreaGuide.classList.add('hidden');
+
+      showToast('Generando PNG en alta resolución...');
+
+      // Use html2canvas with scale 3 for ultra-crisp resolution
+      html2canvas(captureRoot, {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `tiktok-template-${inputAppName.value.toLowerCase().replace(/[^a-z0-9]/g, '-') || 'app'}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        if (wasGuideOpen) safeAreaGuide.classList.remove('hidden');
+        showToast('¡Plantilla descargada en HD!');
+      }).catch(err => {
+        if (wasGuideOpen) safeAreaGuide.classList.remove('hidden');
+        showToast('Error al exportar. Revisa la consola.');
+      });
+    });
+
+    document.getElementById('presetWebIA').addEventListener('click', () => {
+      inputHook.value = 'DEJA DE HACER DIAPOSITIVAS A MANO 🤫';
+      inputAppName.value = 'Gamma.app';
+      inputCategory.value = '🤖 Inteligencia Artificial';
+      inputDescription.value = 'Crea diapositivas, documentos y páginas web enteras en 30 segundos solo escribiendo un texto breve.';
+      inputPoint1.value = 'Genera diseños completos con 1 clic de IA';
+      inputPoint2.value = 'Exporta directo a PDF y PowerPoint sin marcas';
+      inputPoint3.value = 'Versión gratuita con créditos recargables';
+      inputPricing.value = 'Gratis + Plan Pro';
+      inputPlatform.value = 'Web / Navegador';
+      inputRating.value = '⭐ 9.9 / 10';
+      inputCta.value = 'Guarda el video antes de tu próxima expo 📌';
+      applyTheme('cyber');
+      updatePreview();
+      triggerEntranceAnimation();
+    });
+
+    document.getElementById('presetAppProductivity').addEventListener('click', () => {
+      inputHook.value = 'LA APP SECRETA DE LOS ESTUDIANTES TOP 🧠';
+      inputAppName.value = 'Notion Calendar';
+      inputCategory.value = '⚡ Productividad';
+      inputDescription.value = 'Conecta todas tus tareas, reuniones y horarios en una interfaz limpia con atajos de teclado.';
+      inputPoint1.value = 'Se sincroniza en tiempo real con Google Calendar';
+      inputPoint2.value = 'Comparte tu disponibilidad en 2 segundos';
+      inputPoint3.value = 'Modo oscuro elegante y minimalista';
+      inputPricing.value = '100% Gratuito';
+      inputPlatform.value = 'iOS / Android / Mac';
+      inputRating.value = '⭐ 9.8 / 10';
+      inputCta.value = 'Comenta "APP" y te paso el enlace directo 🚀';
+      applyTheme('bento');
+      updatePreview();
+      triggerEntranceAnimation();
+    });
+
+    document.getElementById('presetFreeUtility').addEventListener('click', () => {
+      inputHook.value = 'ESTA WEB TE VA A SALVAR EL SEMESTRE 🎓';
+      inputAppName.value = 'TinyWow Tools';
+      inputCategory.value = '🛠️ Herramientas Gratis';
+      inputDescription.value = 'Más de 200 herramientas online gratuitas para PDF, imágenes, video e IA sin registrarte.';
+      inputPoint1.value = 'Quita fondos de fotos al instante con IA';
+      inputPoint2.value = 'Une, corta y desbloquea PDFs pesados';
+      inputPoint3.value = 'Descarga audios y videos sin marcas';
+      inputPricing.value = '100% Gratis / Sin Registro';
+      inputPlatform.value = 'Web / Cualquier dispositivo';
+      inputRating.value = '⭐ 10 / 10';
+      inputCta.value = 'Compártelo con tu amigo que hace todo tarde ⏰';
+      applyTheme('creator');
+      updatePreview();
+      triggerEntranceAnimation();
+    });
+
+    document.getElementById('presetSecretApp').addEventListener('click', () => {
+      inputHook.value = 'GOOGLE NO QUIERE QUE CONOZCAS ESTA APP ⚠️';
+      inputAppName.value = 'Photomath Pro';
+      inputCategory.value = '📐 Estudio & Hacks';
+      inputDescription.value = 'Apunta tu cámara a cualquier problema matemático complejo y te muestra la solución paso a paso.';
+      inputPoint1.value = 'Explica el por qué de cada fórmula y regla';
+      inputPoint2.value = 'Funciona con letra a mano y libros impresos';
+      inputPoint3.value = 'Gráficas animadas en 2D en tiempo real';
+      inputPricing.value = 'Gratis en App Store y Google Play';
+      inputPlatform.value = 'iOS y Android';
+      inputRating.value = '⭐ 9.9 / 10';
+      inputCta.value = 'Guarda el Reel antes de que borren este truco 🤫';
+      applyTheme('alert');
+      updatePreview();
+      triggerEntranceAnimation();
+    });
+
+    document.getElementById('copyScriptBtn').addEventListener('click', () => {
+      const scriptText = `🎬 GUION ESTRUCTURADO PARA TU VIDEO DE TIKTOK:
+
+⏱️ [0:00 - 0:03] GANCHO VIRAL (Di esto a cámara y muestra el título en grande):
+"${inputHook.value}"
+
+⏱️ [0:03 - 0:10] EL PROBLEMA Y LA SOLUCIÓN:
+"Si estás cansado de perder horas haciendo esto a mano, necesitas probar ${inputAppName.value}. Básicamente lo que hace es: ${inputDescription.value.toLowerCase()}."
+
+⏱️ [0:10 - 0:24] LOS 3 PUNTOS CLAVE (Haz zoom a la pantalla mientras los señalas):
+1️⃣ Primero: ${inputPoint1.value}.
+2️⃣ Segundo: ${inputPoint2.value}.
+3️⃣ Y lo mejor de todo: ${inputPoint3.value}.
+
+⏱️ [0:24 - 0:30] DETALLES Y LLAMADA A LA ACCIÓN (Cierre):
+"Está disponible en ${inputPlatform.value} y su precio es ${inputPricing.value}."
+"${inputCta.value}"
+
+📝 Hashtags recomendados para posicionar:
+#tecnologia #apps #trucosweb #inteligenciaartificial #productividad`;
+
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = scriptText;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('¡Guion y teleprompter copiado al portapapeles!');
+      } catch (err) {
+        showToast('Error al copiar');
+      }
+      document.body.removeChild(tempTextArea);
+    });
+
+    // Initial setup on load
+    updatePreview();
+    applyTheme('cyber');
+  </script>
+</body>
+</html>
+```
